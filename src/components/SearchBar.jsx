@@ -1,36 +1,53 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { paper, IconButton, Paper } from '@mui/material';
+import { Paper, IconButton } from '@mui/material';
 import { Search } from '@mui/icons-material';
 
-const SearchBar = () => {
-  const [searchTerm, setsearchTerm] = useState('');
+const SearchBar = ({ isVisible }) => {
+  const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(searchTerm){
-navigate(`/search/${searchTerm}`);
-setsearchTerm('');
+    if (searchTerm.trim()) {
+      navigate(`/search/${searchTerm}`); // Navigate to the search results page
+      setSearchTerm('');
     }
-  }
+  };
+
   return (
-    <Paper 
-    component="form"
-    onSubmit={handleSubmit}
-    sx={{
+    <Paper
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{
+        display: isVisible ? 'flex' : 'none',
+        position: 'sticky',
+        top: 0,
+        zIndex: 999,
         borderRadius: 20,
         border: '1px solid #e3e3e3',
         pl: 2,
         boxShadow: 'none',
-        mr: { sm:5 }
-    }}
+        mr: { sm: 5 },
+      }}
     >
-<input className='search-bar' placeholder='Search...' value={searchTerm} onChange={(e) => setsearchTerm(e.target.value)} />
-<IconButton type='submit' sx={{p: '10px', color: 'red'  }}>
-<Search />
-</IconButton>
+      <input
+        className="search-bar"
+        placeholder="Search..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        style={{
+          border: 'none',
+          outline: 'none',
+          background: 'transparent',
+          width: 'calc(100% - 48px)', // Adjust width to match IconButton size
+        }}
+      />
+      <IconButton type="submit" sx={{ p: '10px', color: 'red' }}>
+        <Search />
+      </IconButton>
     </Paper>
-  )
-}
+  );
+};
 
-export default SearchBar
+export default SearchBar;
